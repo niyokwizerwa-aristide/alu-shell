@@ -1,31 +1,13 @@
 #!/usr/bin/env bash
 # Init-like script to start, stop, and restart manage_my_process
 PID_FILE="/var/run/my_process.pid"
-SCRIPT="./manage_my_process"
 case "$1" in
 start)
- $SCRIPT &
-  echo "$!" > "$PID_FILE"
+./manage_my_process &
+echo "$!" > "$PID_FILE"
 echo "manage_my_process started"
-//
-
-cat << 'EOF' > 11-manage_my_process
-#!/usr/bin/env bash
-
-# Init-like script to start, stop, and restart manage_my_process
-
-PID_FILE="/var/run/my_process.pid"
-SCRIPT="./manage_my_process"
-case "$1" in
-start)
- $SCRIPT &
-  echo "$!" > "$PID_FILE"
-echo "manage_my_process started"
-//
-
-
- ;;
- stop)
+;;
+stop)
 if [ -f "$PID_FILE" ]; then
 kill "$(cat "$PID_FILE")"
 rm -f "$PID_FILE"
@@ -39,11 +21,11 @@ if [ -f "$PID_FILE" ]; then
 kill "$(cat "$PID_FILE")"
 rm -f "$PID_FILE"
 fi
- $SCRIPT &
+./manage_my_process &
 echo "$!" > "$PID_FILE"
 echo "manage_my_process restarted"
 ;;
-*)
+ *)
 echo "Usage: manage_my_process {start|stop|restart}"
 exit 1
 ;;
